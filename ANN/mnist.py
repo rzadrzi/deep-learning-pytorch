@@ -65,7 +65,7 @@ def definition(model):
 def train(epoch, net, loss, optimizer, train_loader, test_loader):
     train_accuracy  = []
     test_accuracy = []
-    losses  = torch.zeros(epoch)
+    train_losses  = torch.zeros(epoch)
     
     for epochi in range(epoch):
         batch_accuracy  = []
@@ -87,7 +87,7 @@ def train(epoch, net, loss, optimizer, train_loader, test_loader):
             batch_accuracy.append( 100*torch.mean((torch.argmax(yHAT,axis=1) == y).float())) 
             
         # and get average losses across the batches
-        losses[epochi] = np.mean(batch_loss)
+        train_losses[epochi] = np.mean(batch_loss)
         train_accuracy.append(np.mean(batch_accuracy))
         
         # net.eval()
@@ -95,10 +95,11 @@ def train(epoch, net, loss, optimizer, train_loader, test_loader):
             X,y = next(iter(test_loader))
             yHAT = net(X)
             test_accuracy.append(100*torch.mean((torch.argmax(yHAT,axis=1) == y).float()))
+            test_losses = loss(y, yHAT)
             
         print("Epoch: {}, Loss:  {:.4f}, Train Accuracy: {:.2f}%, Test Accuracy: {:.2f}%".format(epochi + 1, losses[epochi].item(), train_accuracy[epochi], test_accuracy[epochi]))
         
-    return net, losses, train_accuracy, test_accuracy
+    return net, train_losses, test_losses, train_accuracy, test_accuracy
 
 def evaluate(net, test_loader):
     net.eval()
