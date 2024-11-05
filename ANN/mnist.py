@@ -9,6 +9,9 @@ from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets,transforms
 
 
+model_path = os.path.join(os.getcwd(), "models", "mnist")
+model_path += ".pth"
+
 # import data
 def data():
     # download datasets
@@ -110,8 +113,6 @@ def evaluate(net, test_loader):
         
 
 def save_model(net):
-    model_path =os.path.join(os.getcwd(), "models", "mnist")
-    model = model_path + ".pth"
     torch.save(net.state_dict(),model)
         
 
