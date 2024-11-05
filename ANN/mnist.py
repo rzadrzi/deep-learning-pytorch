@@ -112,8 +112,8 @@ def evaluate(net, test_loader):
         print(f'Accuracy for this batch {accuracy}%')
         
 
-def save_model(net):
-    torch.save(net.state_dict(),model)
+def save_model(net, model_apth):
+    torch.save(net.state_dict(), model_apth)
         
 
 def plot_data(data):
