@@ -163,6 +163,28 @@ def plot_results(train_losses, train_accuracy, test_accuracy):
     plt.savefig(os.path.join(fig_path, "mnist_results.jpg"))
     # plt.show()
     
+
+def plot_errors(test_loader, model, test_data):
+    X, y = next(iter(test_loader))
+    yHat = model(X)
+    errors = np.where(torch.max(yHat, axis=1)[1] != y)[0]
+    print("accuracy on test dataset: {}%".format(100 - (errors.shape[0]/y.shape[0])*100))
+    fig, axs = plt.subplots(3, 4, figsize=(20,10))
+
+    for ax in axs.flatten():
+        random_index = np.random.randint(0, errors.shape[0])
+        error_index = errors[random_index]
+        
+        image, label = test_data[error_index]
+        guess = torch.max(yHat, axis=1)[1][error_index]
+        
+        ax.imshow(image.numpy()[0], cmap='gray')
+        ax.set_title('Label: {}    Guess: {}'.format(label, guess))
+    plt.suptitle('Sample of Errors',fontsize=20)
+    plt.tight_layout(rect=[0,0,1,.95])
+    plt.savefig(os.path.join(fig_path, "mnist_errors.jpg"))
+    # plt.show()
+    
     
 def main():
     train_data, test_data, train_loader, test_loader = load_data()
