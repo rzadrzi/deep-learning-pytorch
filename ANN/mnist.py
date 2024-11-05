@@ -13,7 +13,7 @@ model_path = os.path.join(os.getcwd(), "models", "mnist")
 model_path += ".pth"
 
 # import data
-def data():
+def load_data():
     # download datasets
     train_data = datasets.MNIST(
         root='data',
@@ -97,7 +97,7 @@ def train(epoch, net, loss, optimizer, train_loader, test_loader):
             test_accuracy.append(100*torch.mean((torch.argmax(yHAT,axis=1) == y).float()))
             test_losses = loss(y, yHAT)
             
-        print("Epoch: {}, Loss:  {:.4f}, Train Accuracy: {:.2f}%, Test Accuracy: {:.2f}%".format(epochi + 1, losses[epochi].item(), train_accuracy[epochi], test_accuracy[epochi]))
+        print("Epoch: {}, Loss:  {:.4f}, Train Accuracy: {:.2f}%, Test Accuracy: {:.2f}%".format(epochi + 1, train_losses[epochi].item(), train_accuracy[epochi], test_accuracy[epochi]))
         
     return net, train_losses, test_losses, train_accuracy, test_accuracy
 
@@ -116,6 +116,14 @@ def evaluate(net, test_loader):
 def save_model(net, model_apth):
     torch.save(net.state_dict(), model_apth)
         
+
+def load_model(model_path):
+    # Load Model
+    mnist_model = Net()
+    mnist_model.load_state_dict(torch.load(model_path, weights_only=True))
+    mnist_model.eval()
+    return mnist_model
+
 
 def plot_data(data):
     # schow 12 randomly iamges
@@ -150,8 +158,10 @@ def plot_results(train_losses, test_losses, train_accuracy, test_accuracy):
     
     
 def main():
+    train_data, test_data, train_loader, test_loader = load_data()
     net, loss, optimizer = definition(Net)
-    print(net)
+    train(10, net, loss, optimizer, train_loader, test_loader)
+    # print(net)
     
     
 if __name__ == "__main__":
