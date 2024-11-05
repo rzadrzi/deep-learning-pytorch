@@ -189,7 +189,7 @@ def plot_errors(model, test_loader, test_data):
 def main():
     train_data, test_data, train_loader, test_loader = load_data()
     net, loss, optimizer = definition(Net)
-    net, train_losses, train_accuracy, test_accuracy = train(5, net, loss, optimizer, train_loader, test_loader)
+    net, train_losses, train_accuracy, test_accuracy = train(150, net, loss, optimizer, train_loader, test_loader)
 
     plot_data(train_data)
     plot_results(train_losses, train_accuracy, test_accuracy)
