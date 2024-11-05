@@ -164,7 +164,7 @@ def plot_results(train_losses, train_accuracy, test_accuracy):
     # plt.show()
     
 
-def plot_errors(test_loader, model, test_data):
+def plot_errors(model, test_loader, test_data):
     X, y = next(iter(test_loader))
     yHat = model(X)
     errors = np.where(torch.max(yHat, axis=1)[1] != y)[0]
@@ -190,14 +190,15 @@ def main():
     train_data, test_data, train_loader, test_loader = load_data()
     net, loss, optimizer = definition(Net)
     net, train_losses, train_accuracy, test_accuracy = train(10, net, loss, optimizer, train_loader, test_loader)
-    save_model(net, model_path)
-    model = load_model(model_path)
-    
+
     plot_data(train_data)
     plot_results(train_losses, train_accuracy, test_accuracy)
     
+    save_model(net, model_path)
+    model = load_model(model_path)
+    plot_errors(model, test_loader, test_data)
     
     
-    
+
 if __name__ == "__main__":
     main()
