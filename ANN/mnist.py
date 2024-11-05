@@ -12,7 +12,7 @@ from torchvision import datasets,transforms
 model_path = os.path.join(os.getcwd(), "models", "mnistpy")
 model_path += ".pth"
 
-fig_path = os.path.join(os.getcwd(), "iamges")
+fig_path = os.path.join(os.getcwd(), "images")
 
 
 # import data
@@ -140,9 +140,11 @@ def plot_data(data):
 
     plt.suptitle('Sample of MNIST Dataset',fontsize=20)
     plt.tight_layout(rect=[0,0,1,.95])
-    plt.show()
+    plt.savefig(os.path.join(fig_path, "mnist_data.jpg"))
     
+    # plt.show()
     
+        
 def plot_results(train_losses, train_accuracy, test_accuracy):
     fig, axs = plt.subplots(1, 2, figsize=(20,10))
     axs[0].plot(train_losses)
@@ -158,19 +160,18 @@ def plot_results(train_losses, train_accuracy, test_accuracy):
     axs[1].set_title("Train Accuracy: {:.2f}%   Test Accuracy: {:.2f}%".format(train_accuracy[-1], test_accuracy[-1]))
 
     plt.suptitle("ANN MNIST Results", fontsize=20)
+    plt.savefig(os.path.join(fig_path, "mnist_results.jpg"))
+    # plt.show()
     
     
 def main():
     train_data, test_data, train_loader, test_loader = load_data()
     net, loss, optimizer = definition(Net)
     net, train_losses, train_accuracy, test_accuracy = train(10, net, loss, optimizer, train_loader, test_loader)
-    
     save_model(net, model_path)
+    model = load_model(model_path)
     
-    load_model(model_path)
-    
-    # plot_data(train_data)
-    
+    plot_data(train_data)
     plot_results(train_losses, train_accuracy, test_accuracy)
     
     
