@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets,transforms
 
 
-model_path = os.path.join(os.getcwd(), "models", "mnist")
+model_path = os.path.join(os.getcwd(), "models", "mnistpy")
 model_path += ".pth"
 
 fig_path = os.path.join(os.getcwd(), "iamges")
@@ -116,8 +116,8 @@ def evaluate(net, test_loader):
         print(f'Accuracy for this batch {accuracy}%')
         
 
-def save_model(net, model_apth):
-    torch.save(net.state_dict(), model_apth)
+def save_model(net, model_path):
+    torch.save(net.state_dict(), model_path)
         
 
 def load_model(model_path):
@@ -143,13 +143,13 @@ def plot_data(data):
     plt.show()
     
     
-def plot_results(train_losses, test_losses, train_accuracy, test_accuracy):
+def plot_results(train_losses, train_accuracy, test_accuracy):
     fig, axs = plt.subplots(1, 2, figsize=(20,10))
     axs[0].plot(train_losses)
-    axs[0].plot(test_losses)
+
     axs[0].set_xlabel("Epoch")
     axs[0].set_ylabel("Loss function")
-    axs[0].set_title("Train Loss: {:.4f}   Test Loss: {:.4f}".format(train_losses[-1], test_losses[-1]))
+    axs[0].set_title("Train Loss: {:.4f}".format(train_losses[-1]))
 
     axs[1].plot(train_accuracy)
     axs[1].plot(test_accuracy)
@@ -164,7 +164,16 @@ def main():
     train_data, test_data, train_loader, test_loader = load_data()
     net, loss, optimizer = definition(Net)
     net, train_losses, train_accuracy, test_accuracy = train(10, net, loss, optimizer, train_loader, test_loader)
-    # print(net)
+    
+    save_model(net, model_path)
+    
+    load_model(model_path)
+    
+    # plot_data(train_data)
+    
+    plot_results(train_losses, train_accuracy, test_accuracy)
+    
+    
     
     
 if __name__ == "__main__":
