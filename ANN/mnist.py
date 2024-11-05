@@ -12,6 +12,9 @@ from torchvision import datasets,transforms
 model_path = os.path.join(os.getcwd(), "models", "mnist")
 model_path += ".pth"
 
+fig_path = os.path.join(os.getcwd(), "iamges")
+
+
 # import data
 def load_data():
     # download datasets
