@@ -131,12 +131,14 @@ def plot_data(data):
     plt.tight_layout(rect=[0,0,1,.95])
     plt.show()
     
-def plot_results():
+    
+def plot_results(train_losses, test_losses, train_accuracy, test_accuracy):
     fig, axs = plt.subplots(1, 2, figsize=(20,10))
-    axs[0].plot(losses)
+    axs[0].plot(train_losses)
+    axs[0].plot(test_losses)
     axs[0].set_xlabel("Epoch")
     axs[0].set_ylabel("Loss function")
-    axs[0].set_title("Loss function {:.4f}".format(losses[-1]))
+    axs[0].set_title("Train Loss: {:.4f}   Test Loss: {:.4f}".format(train_losses[-1], test_losses[-1]))
 
     axs[1].plot(train_accuracy)
     axs[1].plot(test_accuracy)
@@ -144,7 +146,7 @@ def plot_results():
     axs[1].set_ylabel("Accuracy")
     axs[1].set_title("Train Accuracy: {:.2f}%   Test Accuracy: {:.2f}%".format(train_accuracy[-1], test_accuracy[-1]))
 
-    plt.suptitle("ANN MNIST 100 epoch", fontsize=20)
+    plt.suptitle("ANN MNIST Results", fontsize=20)
     
     
 def main():
