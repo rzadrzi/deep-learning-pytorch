@@ -95,11 +95,11 @@ def train(epoch, net, loss, optimizer, train_loader, test_loader):
             X,y = next(iter(test_loader))
             yHAT = net(X)
             test_accuracy.append(100*torch.mean((torch.argmax(yHAT,axis=1) == y).float()))
-            test_losses = loss(y, yHAT)
+            # test_losses = loss(y, yHAT)
             
         print("Epoch: {}, Loss:  {:.4f}, Train Accuracy: {:.2f}%, Test Accuracy: {:.2f}%".format(epochi + 1, train_losses[epochi].item(), train_accuracy[epochi], test_accuracy[epochi]))
         
-    return net, train_losses, test_losses, train_accuracy, test_accuracy
+    return net, train_losses, train_accuracy, test_accuracy
 
 def evaluate(net, test_loader):
     net.eval()
@@ -160,7 +160,7 @@ def plot_results(train_losses, test_losses, train_accuracy, test_accuracy):
 def main():
     train_data, test_data, train_loader, test_loader = load_data()
     net, loss, optimizer = definition(Net)
-    train(10, net, loss, optimizer, train_loader, test_loader)
+    net, train_losses, train_accuracy, test_accuracy = train(10, net, loss, optimizer, train_loader, test_loader)
     # print(net)
     
     
