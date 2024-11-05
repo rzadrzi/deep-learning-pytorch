@@ -9,6 +9,28 @@ from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets,transforms
 
 
+# import data
+def data():
+    # download datasets
+    train_data = datasets.MNIST(
+        root='data',
+        train = True,
+        download=True,
+        transform=transforms.ToTensor())
+
+    test_data = datasets.MNIST(
+        root='data',
+        train = False,
+        download=True,
+        transform=transforms.ToTensor())
+    
+    # use DaraLoader for batching datasets
+    train_loader = DataLoader(train_data, batch_size=32)
+    test_loader = DataLoader(test_data, batch_size=test_data.targets.size()[0])
+    
+    return train_data, test_data, train_loader, test_loader
+
+
 # create ANN model for MNIST 
 class Net(nn.Module):
     def __init__(self):
@@ -74,3 +96,38 @@ def train(epoch, net, loss, optimizer, train_loader, test_loader):
         print("Epoch: {}, Loss:  {:.4f}, Train Accuracy: {:.2f}%, Test Accuracy: {:.2f}%".format(epochi + 1, losses[epochi].item(), train_accuracy[epochi], test_accuracy[epochi]))
         
     return net, losses, train_accuracy, test_accuracy
+
+def evaluate(net, test_loader):
+    net.eval()
+    images, labels = next(iter(test_loader))
+    with torch.no_grad():
+        outputs = net(images)
+        _, predicted = torch.max(outputs, 1)
+        
+        correct = (predicted == labels).sum().item()
+        accuracy = 100 * correct/labels.size(0)
+        print(f'Accuracy for this batch {accuracy}%')
+        
+
+def plot_data(data):
+    # schow 12 randomly iamges
+    fig,axs = plt.subplots(3,4,figsize=(20,10))
+    for ax in axs.flatten():
+        # pick a random image
+        random_index = np.random.randint(0,high=data.targets.size(0))
+        img, label = data[random_index]
+        ax.imshow(img.numpy()[0], cmap='gray')
+        ax.set_title(f'The number: {label}')
+
+    plt.suptitle('Sample of MNIST Dataset',fontsize=20)
+    plt.tight_layout(rect=[0,0,1,.95])
+    plt.show()
+    
+    
+def main():
+    net, loss, optimizer = definition(Net)
+    print(net)
+    
+    
+if __name__ == "__main__":
+    main()
